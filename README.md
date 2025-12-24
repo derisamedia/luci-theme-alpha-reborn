@@ -17,7 +17,7 @@
 
 <div align="center">
 
-# luci-theme-alpha (BETA)
+# luci-theme-alpha-reborn (BETA)
 
 <img src="https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/brand.png">
 
@@ -35,17 +35,17 @@ This official 2'nd theme in Indo-Wrt Community in indonesia. Not the result of m
 <summary>Preview Screenshoot</summary>
 <p>
   
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss1.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/1.png)
   
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss2.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/2.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/ss3.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/3.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview1.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/4.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview2.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/5.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha/master/mobileview3.png)
+![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alphar-reborn/master/screenshot/6.png)
 
 </p>
 
