@@ -19,7 +19,7 @@
 
 # luci-theme-alpha (BETA)
 
-<img src="https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/luasrc/brand.png">
+<img src="https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/brand.png">
 
 [![issues][issues-badge]][issues]
 [![release][release-badge]][release]

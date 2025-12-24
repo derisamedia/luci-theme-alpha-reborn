@@ -1,0 +1,166 @@
+{% if (!blank_page): %}
+				</main>
+				
+				<!-- Footer -->
+				<footer class="main-footer">
+					<span style="font-size: 0.875rem; color: #6B7280;">
+						Powered by
+						<a href="https://github.com/openwrt/luci" target="_blank" rel="noreferrer">
+							{{ version.luciname }} ({{ version.luciversion }})</a>
+						/
+						<a href="{{ entityencode(version.disturl ?? '#', true) }}" target="_blank" rel="noreferrer">
+							{{ version.distname }} {{ version.distversion }} ({{ version.distrevision }})</a>
+						{% if (lua_active): %}
+							/ {{ _('Lua compatibility mode active') }}
+						{% endif %}
+					</span>
+					<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
+				</footer>
+			</div>
+		</div>
+		<script>L.require('menu-bootstrap')</script>
+		<script>
+			// Mobile menu toggle
+			document.getElementById('mobile-menu-toggle')?.addEventListener('click', function() {
+				document.getElementById('sidebar')?.classList.toggle('open');
+			});
+		</script>
+        
+        <!-- Toast Notification Manager (Restored to footer for immediate update) -->
+        <script>
+            (function() {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+
+                // Helpher: Initialize Timer & Hover Logic
+                function initToastBehavior(toast) {
+                    if (toast.dataset.toastInit) return;
+                    toast.dataset.toastInit = 'true';
+
+                    const autoDismissDelay = 5000;
+                    let dismissTimer;
+
+                    const dismissToast = () => {
+                        toast.classList.add('fade-out');
+                        toast.addEventListener('animationend', () => toast.remove());
+                    };
+
+                    const startTimer = () => {
+                        dismissTimer = setTimeout(dismissToast, autoDismissDelay);
+                    };
+
+                    toast.addEventListener('mouseenter', () => clearTimeout(dismissTimer));
+                    toast.addEventListener('mouseleave', startTimer);
+
+                    // Add click listener to close button
+                    const closeBtn = toast.querySelector('.toast-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            dismissToast();
+                        });
+                    }
+
+                    startTimer();
+                }
+
+                function transformAndMove(node) {
+                    if (node.nodeType === 1 && node.classList.contains('alert-message') && !node.classList.contains('processed-toast')) {
+                        node.classList.add('processed-toast');
+
+                        const toast = document.createElement('div');
+                        toast.className = 'toast-notification';
+                        toast.style.pointerEvents = 'auto';
+                        
+                        // Map classes
+                        if (node.classList.contains('warning')) toast.classList.add('warning');
+                        else if (node.classList.contains('success')) toast.classList.add('success');
+                        else if (node.classList.contains('error') || node.classList.contains('danger')) toast.classList.add('error');
+                        else if (node.classList.contains('notice')) toast.classList.add('success'); 
+
+                        let titleText = 'Notification';
+                        const h4 = node.querySelector('h4');
+                        if (h4) {
+                            titleText = h4.textContent;
+                            h4.remove();
+                        }
+                        const existingClose = node.querySelector('.close');
+                        if (existingClose) existingClose.remove();
+
+                        const header = document.createElement('div');
+                        header.className = 'toast-header';
+                        
+                        const titleEl = document.createElement('h4');
+                        titleEl.className = 'toast-title';
+                        titleEl.textContent = titleText;
+
+                        const closeBtn = document.createElement('button');
+                        closeBtn.className = 'toast-close';
+                        closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+                        closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+                        // Click listener is handled genericly in initToastBehavior
+
+                        header.appendChild(titleEl);
+                        header.appendChild(closeBtn);
+
+                        const body = document.createElement('div');
+                        body.className = 'toast-message';
+                        
+                        while (node.firstChild) {
+                            body.appendChild(node.firstChild);
+                        }
+                        
+                        body.querySelectorAll('button').forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.stopImmediatePropagation();
+                                
+                                const t = this.closest('.toast-notification');
+                                if (t) {
+                                    t.classList.add('fade-out');
+                                    t.addEventListener('animationend', () => t.remove());
+                                }
+                            }, true);
+                        });
+
+                        toast.appendChild(header);
+                        toast.appendChild(body);
+
+                        node.style.cssText = 'display: none !important;';
+                        
+                        // Apply timer
+                        initToastBehavior(toast);
+
+                        container.appendChild(toast);
+                    }
+                }
+
+                // 1. Process Legacy Alerts
+                document.querySelectorAll('.alert-message').forEach(transformAndMove);
+
+                // 2. Process Static Toasts (e.g. No Password Warning)
+                container.querySelectorAll('.toast-notification').forEach(initToastBehavior);
+
+                // 3. Watch for New Alerts
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === 1) {
+                                if (node.classList.contains('alert-message')) {
+                                    transformAndMove(node);
+                                } else if (node.querySelectorAll) {
+                                    node.querySelectorAll('.alert-message').forEach(transformAndMove);
+                                }
+                            }
+                        });
+                    });
+                });
+
+                observer.observe(document.body, { childList: true, subtree: true });
+            })();
+        </script>
+		{% endif %}
+	</body>
+</html>
