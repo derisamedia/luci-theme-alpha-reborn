@@ -18,7 +18,7 @@
 				</footer>
 			</div>
 		</div>
-		<script>L.require('menu-bootstrap')</script>
+		<script>L.require('menu-4lpha')</script>
 		<script>
 			// Mobile menu toggle
 			document.getElementById('mobile-menu-toggle')?.addEventListener('click', function() {
