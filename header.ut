@@ -1,0 +1,252 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2012 David Menting <david@nut-bolt.nl>
+ Copyright 2008-2022 Jo-Philipp Wich <jo@mein.io>
+ Copyright 2021-2025 Derisamedia (Muhamad Deri Sahertian) <yuimizuno86@gmail.com>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{%
+	import { getuid, getspnam } from 'luci.core';
+
+	const boardinfo = ubus.call('system', 'board');
+	const darkpref = (theme == 'bootstrap-dark' ? 'true' : (theme == 'bootstrap-light' ? 'false' : null));
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}" {{ darkpref ? `data-darkmode="${darkpref}"` : '' }}>
+	<head>
+		<meta charset="utf-8">
+		<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${node.title}` : ''}`) }} - LuCI</title>
+		{% if (!darkpref): %}
+			<script>
+				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
+				    rootElement = document.querySelector(':root'),
+				    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
+
+				mediaQuery.addEventListener('change', setDarkMode);
+				setDarkMode(mediaQuery);
+			</script>
+		{% endif %}
+		<meta name="viewport" content="initial-scale=1.0">
+		
+		<!-- Local Fonts -->
+		<!-- Local Fonts (Embedded in cascade.css) -->
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="{{ media }}/cascade.css?v=25.168.50434~d6b13f6">
+
+		<link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
+		<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
+        
+        <!-- PWA Manifest & Service Worker -->
+        <link rel="manifest" href="{{ media }}/PWA/manifest.json">
+        <meta name="theme-color" content="#000000ff">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('{{ media }}/PWA/sw.js')
+                        .then(registration => console.log('SW registered:', registration))
+                        .catch(error => console.log('SW registration failed:', error));
+                });
+            }
+        </script>
+
+		{% if (node?.css): %}
+		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+		{% endif %}
+		{% if (css): %}
+		<style title="text/css">{{ css }}</style>
+		{% endif %}
+		
+		<!-- Chart.js -->
+		<script src="{{ media }}/js/chart.umd.min.js"></script>
+		
+		<!-- Scripts -->
+		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+		<script src="{{ resource }}/cbi.js?v=25.168.50434~d6b13f6"></script>
+		
+		<style>
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+		</style>
+	</head>
+
+	<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(node?.title ?? ''), true) }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
+		{% if (!blank_page): %}
+		<!-- Toast Container for Alerts (Available globally) -->
+        <div class="toast-container" id="toast-container">
+            {% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+                <div class="toast-notification warning" role="alert">
+                    <div class="toast-header">
+                        <h4 class="toast-title">{{ _('No password set!') }}</h4>
+                        <button type="button" class="toast-close" aria-label="Close">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <p class="toast-message">{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+                    {% if (dispatcher.lookup("admin/system/admin")): %}
+                    <div class="toast-actions">
+                        <a class="toast-btn" href="{{ dispatcher.build_url("admin/system/admin") }}">{{ _('Go to password configuration') }} →</a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if (boardinfo.rootfs_type == "initramfs"): %}
+                <div class="toast-notification warning" role="alert">
+                    <div class="toast-header">
+                        <h4 class="toast-title">{{ _('Recovery Mode') }}</h4>
+                        <button type="button" class="toast-close" aria-label="Close">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <p class="toast-message">{{ _('System is running in recovery (initramfs) mode. Settings will be lost after reboot.') }}</p>
+                    {% if (dispatcher.lookup("admin/system/flash")): %}
+                    <div class="toast-actions">
+                        <a class="toast-btn" href="{{ dispatcher.build_url("admin/system/flash") }}">{{ _('Go to firmware upgrade') }} →</a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+		{% if (!blank_page): %}
+
+		<div class="modern-layout">
+			<!-- Sidebar -->
+			<aside class="sidebar" id="sidebar">
+				<div class="sidebar-logo">
+					<div class="sidebar-logo-icon" style="background: none; padding: 0; width: auto; height: auto;">
+						<img src="{{ media }}/brand.png" alt="Brand" style="width: 160px; height: auto; display: block;">
+					</div>
+
+				</div>
+				
+				<nav>
+					<ul class="sidebar-nav" id="sidebar-menu">
+						<!-- Menu will be populated by JavaScript -->
+					</ul>
+				</nav>
+			</aside>
+			
+			<!-- Main Wrapper -->
+			<div class="main-wrapper">
+				<!-- Top Header -->
+				<header class="top-header">
+					<div class="top-header-left">
+						<button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" onclick="document.getElementById('sidebar').classList.toggle('open')">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<line x1="3" y1="12" x2="21" y2="12"/>
+								<line x1="3" y1="6" x2="21" y2="6"/>
+								<line x1="3" y1="18" x2="21" y2="18"/>
+							</svg>
+						</button>
+						<div>
+							<h1 class="top-header-title" id="typewriter-text"></h1>
+							<span class="top-header-subtitle" id="page-subtitle">{{ striptags(node?.title ?? 'Overview') }}</span>
+                            <script>
+                                window.boardInfoConfig = {
+                                    model: "{{ striptags(boardinfo.model ?? 'OpenWrt Device') }}",
+                                    arch: "{{ striptags(boardinfo.system ?? boardinfo.release?.target ?? 'Generic Architecture') }}",
+                                    hostname: "{{ striptags(boardinfo.hostname ?? 'OpenWrt') }}"
+                                };
+                            </script>
+						</div>
+					</div>
+					
+					<div class="top-header-right">
+
+
+
+						
+						<button class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode" style="margin-right: 1rem; border: none; background: transparent; cursor: pointer; color: var(--text-secondary);">
+							<svg id="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: block;">
+								<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+							</svg>
+							<svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+								<circle cx="12" cy="12" r="5"></circle>
+								<line x1="12" y1="1" x2="12" y2="3"></line>
+								<line x1="12" y1="21" x2="12" y2="23"></line>
+								<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+								<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+								<line x1="1" y1="12" x2="3" y2="12"></line>
+								<line x1="21" y1="12" x2="23" y2="12"></line>
+								<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+								<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+							</svg>
+						</button>
+
+                        <script>
+                            (function() {
+                                const toggleBtn = document.getElementById('theme-toggle');
+                                const moonIcon = document.getElementById('theme-icon-moon');
+                                const sunIcon = document.getElementById('theme-icon-sun');
+                                
+                                function updateIcons(isDark) {
+                                    if (isDark) {
+                                        moonIcon.style.display = 'none';
+                                        sunIcon.style.display = 'block';
+                                    } else {
+                                        moonIcon.style.display = 'block';
+                                        sunIcon.style.display = 'none';
+                                    }
+                                }
+
+                                // 1. Check saved preference
+                                const savedTheme = localStorage.getItem('theme');
+                                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                                let isDark = savedTheme === 'dark' || (!savedTheme && systemDark);
+
+                                // 2. Apply immediately
+                                if (isDark) {
+                                    document.documentElement.setAttribute('data-theme', 'dark');
+                                    updateIcons(true);
+                                }
+
+                                // 3. Handle Click
+                                if (toggleBtn) {
+                                    toggleBtn.addEventListener('click', function() {
+                                        const currentTheme = document.documentElement.getAttribute('data-theme');
+                                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                                        
+                                        document.documentElement.setAttribute('data-theme', newTheme);
+                                        localStorage.setItem('theme', newTheme);
+                                        updateIcons(newTheme === 'dark');
+                                    });
+                                }
+                            })();
+                        </script>
+						
+						<div id="indicators" class="header-indicators">
+							<span data-indicator="poll-status" data-clickable="true" class="header-indicator">Refreshing</span>
+							<span data-indicator="uci-changes" data-clickable="true" class="header-indicator"></span>
+						</div>
+						
+						<div class="header-user">
+							<div class="header-user-avatar">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+									<circle cx="12" cy="7" r="4"/>
+								</svg>
+							</div>
+						</div>
+					</div>
+				</header>
+
+				<!-- Main Content -->
+				<main id="maincontent" class="dashboard-container">
+					
+					<noscript>
+						<div class="alert-message warning">
+							<h4>{{ _('JavaScript required!') }}</h4>
+							<p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p>
+						</div>
+					</noscript>
+
+					<div id="tabmenu" style="display:none"></div>
+		{% endif %}

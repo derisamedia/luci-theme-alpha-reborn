@@ -1,3 +1,35 @@
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../bootstrap/fonts/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../bootstrap/fonts/Inter-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../bootstrap/fonts/Inter-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../bootstrap/fonts/Inter-Bold.ttf') format('truetype');
+}
+
 :root {
     /* -----------------------------------------------------------------------
        1. BACKGROUND COLORS
@@ -146,6 +178,33 @@
     --disabled-opacity: 0.4;
 
     color-scheme: dark;
+}
+
+/* -----------------------------------------------------------------------
+   CUSTOM SCROLLBAR
+   ----------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-medium);
+    border-radius: 6px;
+    border: 2px solid var(--bg-main);
+    /* Creates a padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
 }
 
 * {
