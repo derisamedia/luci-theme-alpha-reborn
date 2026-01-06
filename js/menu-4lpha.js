@@ -165,9 +165,12 @@ return baseclass.extend({
             const submenuChildren = ui.menu.getChildren(child);
             const hasSubmenu = submenuChildren.length > 0;
 
+            // Check if this main menu item matches the current path component
+            const isCurrentPath = dispatchPath.length > baseIndex && dispatchPath[baseIndex] === child.name;
+
             // Check active children
             let hasActiveChild = false;
-            if (hasSubmenu) {
+            if (hasSubmenu && isCurrentPath) {
                 submenuChildren.forEach(subchild => {
                     // Check index baseIndex + 1
                     if (dispatchPath.length > baseIndex + 1 && dispatchPath[baseIndex + 1] === subchild.name) {
@@ -177,6 +180,7 @@ return baseclass.extend({
             }
 
             // Consistency check: isActive and hasActiveChild
+            // We expand if we are on this path (isCurrentPath) and have active children, or if we are the leaf active item
             const shouldExpand = isActive || hasActiveChild;
 
             const link = E('a', {
@@ -200,7 +204,8 @@ return baseclass.extend({
 
                 submenuChildren.forEach(subchild => {
                     const subIndex = baseIndex + 1;
-                    const subIsActive = dispatchPath.length > subIndex && dispatchPath[subIndex] === subchild.name;
+                    // Only mark child active if parent is also on the current path
+                    const subIsActive = isCurrentPath && (dispatchPath.length > subIndex && dispatchPath[subIndex] === subchild.name);
 
                     // Build proper URL with parent path
                     const submenuUrl = parentPath ? L.url(parentPath, child.name, subchild.name) : L.url(child.name, subchild.name);
