@@ -9,8 +9,6 @@
     <div class="login-card">
         <div class="login-header">
             <img src="{{ media }}/alpha-os.png" alt="AlphaOS" class="login-brand">
-            <h1 class="login-title">{{ _('Welcome Back') }}</h1>
-            <p class="login-subtitle">{{ _('Please sign in to continue') }}</p>
         </div>
 
         {% if (fuser): %}
@@ -34,7 +32,7 @@
         </form>
 
         <div class="login-footer">
-            <small>ver. 4.1.0-Beta1</small>
+            <small>ver. 4.1.2-Beta1</small>
             <br>
             <a href="https://github.com/derisamedia" target="_blank" class="login-link" aria-label="GitHub">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
