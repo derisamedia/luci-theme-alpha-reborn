@@ -75,14 +75,31 @@ return baseclass.extend({
                 items = ui.menu.getChildren(items[0]);
             }
 
-            return items.map(child => {
-                return {
-                    name: child.name,
-                    title: child.title, // store raw title key
-                    url: pPath ? L.url(pPath, child.name) : L.url(child.name),
-                    icon: defaultIconMap[child.name] || defaultIconMap['default']
-                };
+            const priorities = ['status', 'system', 'services', 'network'];
+            const result = [];
+
+            // 1. Add prioritized items if they exist
+            priorities.forEach(name => {
+                const found = items.find(i => i.name === name);
+                if (found) {
+                    result.push({
+                        name: found.name,
+                        title: found.title,
+                        url: pPath ? L.url(pPath, found.name) : L.url(found.name),
+                        icon: defaultIconMap[found.name] || defaultIconMap['default']
+                    });
+                }
             });
+
+            // 2. Add Logout Manually
+            result.push({
+                name: 'logout',
+                title: 'Logout',
+                url: L.url('admin/logout'),
+                icon: defaultIconMap['logout']
+            });
+
+            return result;
         };
 
         // Load or Init
@@ -149,6 +166,9 @@ return baseclass.extend({
 
         // --- Modal Logic ---
         function openConfigModal() {
+            // Local state for editing
+            let editConfig = JSON.parse(JSON.stringify(config));
+
             // Create Modal DOM
             const modal = E('div', { 'class': 'nav-config-modal', 'id': 'mobile-nav-config-modal' }, [
                 E('div', { 'class': 'nav-config-card' }, [
@@ -156,58 +176,98 @@ return baseclass.extend({
                         E('h3', { 'class': 'nav-config-title' }, [_('Customize Navbar')]),
                         E('button', { 'class': 'nav-config-close', 'click': closeConfigModal }, ['✕'])
                     ]),
-                    E('div', { 'class': 'nav-config-body' }, []) // Content injected below
+                    E('div', { 'class': 'nav-config-body' }, []), // Rows injected here
+                    E('div', { 'class': 'nav-config-actions' }, [
+                        (function () {
+                            const btn = E('button', {
+                                'class': 'btn-add',
+                                'style': 'background:#e0f2fe; color:#0369a1; border:none; border-radius:4px; padding:8px 16px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;',
+                                'click': addItem
+                            });
+                            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add Item';
+                            return btn;
+                        })(),
+                        E('div', { 'class': 'spacer', 'style': 'flex:1' }, []),
+                        E('button', { 'class': 'btn-reset', 'click': resetConfig }, [_('Reset')]),
+                        E('button', { 'class': 'btn-save', 'click': saveConfig }, [_('Save')])
+                    ])
                 ])
             ]);
 
             const body = modal.querySelector('.nav-config-body');
 
-            // Render Editors
-            config.forEach((item, idx) => {
-                const editor = E('div', { 'class': 'nav-item-editor' }, [
-
-                    E('div', { 'class': 'form-group' }, [
-                        E('label', {}, ['URL']),
-                        E('input', {
-                            'type': 'text',
-                            'class': 'form-control url-input',
-                            'value': item.url,
-                            'data-idx': idx
-                        })
-                    ]),
-
-                    E('div', { 'class': 'form-group' }, [
-                        E('label', {}, ['Icon (Upload PNG/JPG)']),
-                        E('div', { 'style': 'display:flex; align-items:center; gap:10px;' }, [
-                            E('div', {
-                                'class': 'icon-preview',
-                                'style': 'width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:4px; display:flex; align-items:center; justify-content:center; overflow:hidden;'
-                            }, [
-                                // Show current icon (svg or img)
-                                (item.icon && item.icon.startsWith('<svg')) ?
-                                    (function () { const s = document.createElement('div'); s.innerHTML = item.icon; return s; })() :
-                                    E('img', { 'src': item.icon, 'style': 'width:100%; height:100%; object-fit:contain;' })
-                            ]),
+            function renderRows() {
+                body.innerHTML = '';
+                editConfig.forEach((item, idx) => {
+                    const row = E('div', { 'class': 'nav-item-editor' }, [
+                        E('div', { 'class': 'form-group' }, [
+                            E('label', {}, ['Title']),
+                            E('input', { 'type': 'text', 'class': 'form-control', 'value': item.title || '', 'change': (e) => item.title = e.target.value })
+                        ]),
+                        E('div', { 'class': 'form-group' }, [
+                            E('label', {}, ['URL']),
+                            E('input', { 'type': 'text', 'class': 'form-control', 'value': item.url || '#', 'change': (e) => item.url = e.target.value })
+                        ]),
+                        E('div', { 'class': 'form-group' }, [
+                            E('label', {}, ['Icon']),
+                            E('input', { 'type': 'text', 'class': 'form-control', 'placeholder': 'SVG or URL', 'value': (item.icon && item.icon.startsWith('<svg')) ? 'SVG Icon' : item.icon, 'disabled': true }),
                             E('input', {
-                                'type': 'file',
-                                'accept': 'image/*',
-                                'class': 'form-control icon-input',
-                                'data-idx': idx
+                                'type': 'file', 'accept': 'image/*', 'style': 'margin-top:5px', 'change': (e) => {
+                                    if (e.target.files[0]) {
+                                        const reader = new FileReader();
+                                        reader.onload = (evt) => {
+                                            item.icon = evt.target.result;
+                                            renderRows(); // Re-render to show update (optional, or just update state)
+                                        };
+                                        reader.readAsDataURL(e.target.files[0]);
+                                    }
+                                }
                             })
-                        ])
-                    ])
-                ]);
-                body.appendChild(editor);
-            });
+                        ]),
+                        (function () {
+                            const btn = E('button', {
+                                'class': 'btn-delete',
+                                'style': 'background:#ef4444; color:white; border:none; border-radius:4px; padding:0; height:38px; width:38px; min-width:38px; display:flex; align-items:center; justify-content:center; margin-top:24px; cursor:pointer;',
+                                'title': 'Remove Item',
+                                'click': () => {
+                                    editConfig.splice(idx, 1);
+                                    renderRows();
+                                }
+                            });
+                            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+                            return btn;
+                        })()
+                    ]);
+                    body.appendChild(row);
+                });
+            }
 
-            // Actions
-            const actions = E('div', { 'class': 'nav-config-actions' }, [
-                E('button', { 'class': 'btn-reset', 'click': resetConfig }, [_('Reset Default')]),
-                E('button', { 'class': 'btn-save', 'click': saveConfig }, [_('Save Changes')])
-            ]);
+            function addItem() {
+                editConfig.push({
+                    title: 'New Item',
+                    url: '/cgi-bin/luci/admin/',
+                    icon: defaultIconMap['default']
+                });
+                renderRows();
+            }
 
-            modal.querySelector('.nav-config-card').appendChild(actions);
+            function saveConfig() {
+                config = editConfig;
+                localStorage.setItem(LS_KEY, JSON.stringify(config));
+                closeConfigModal();
+                self.renderMobileBottomNav(tree);
+            }
 
+            function resetConfig() {
+                if (confirm(_('Reset to default 5 items?'))) {
+                    localStorage.removeItem(LS_KEY);
+                    config = generateDefaultConfig();
+                    closeConfigModal();
+                    self.renderMobileBottomNav(tree);
+                }
+            }
+
+            renderRows();
             document.body.appendChild(modal);
             setTimeout(() => modal.classList.add('open'), 10);
         }
@@ -217,55 +277,6 @@ return baseclass.extend({
             if (modal) {
                 modal.classList.remove('open');
                 setTimeout(() => modal.remove(), 300);
-            }
-        }
-
-        const self = this;
-
-        async function saveConfig() {
-            const urlInputs = document.querySelectorAll('#mobile-nav-config-modal .url-input');
-            const iconInputs = document.querySelectorAll('#mobile-nav-config-modal .icon-input');
-
-            // 1. Update URLs first
-            urlInputs.forEach(input => {
-                const idx = input.dataset.idx;
-                if (idx !== undefined) {
-                    config[idx].url = input.value;
-                }
-            });
-
-            // 2. Process Files (Async)
-            const filePromises = Array.from(iconInputs).map(input => {
-                return new Promise((resolve) => {
-                    if (input.files && input.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            const idx = input.dataset.idx;
-                            if (idx !== undefined) {
-                                config[idx].icon = e.target.result; // Base64 string
-                            }
-                            resolve();
-                        };
-                        reader.readAsDataURL(input.files[0]);
-                    } else {
-                        resolve(); // No file selected, keep existing icon
-                    }
-                });
-            });
-
-            await Promise.all(filePromises);
-
-            localStorage.setItem(LS_KEY, JSON.stringify(config));
-            closeConfigModal();
-            self.renderMobileBottomNav(tree);
-        }
-
-        function resetConfig() {
-            if (confirm(_('Are you sure you want to reset the navigation menu to defaults?'))) {
-                localStorage.removeItem(LS_KEY);
-                config = generateDefaultConfig();
-                closeConfigModal();
-                self.renderMobileBottomNav(tree);
             }
         }
     },

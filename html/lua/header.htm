@@ -6,7 +6,7 @@
 				-%>
 
 				<% local sys=require "luci.sys" local util=require "luci.util" local http=require "luci.http" local
-					disp=require "luci.dispatcher" local boardinfo=util.ubus("system", "board" ) local
+					disp=require "luci.dispatcher" local boardinfo=util.ubus("system", "board" ) or { } local
 					node=disp.context.dispatched local darkpref if theme=="bootstrap-dark" then darkpref="true" elseif
 					theme=="bootstrap-light" then darkpref="false" end http.prepare_content("text/html") -%>
 					<!DOCTYPE html>
@@ -31,8 +31,21 @@
 								<meta name="viewport" content="initial-scale=1.0">
 
 								<!-- Stylesheets -->
-								<link rel="stylesheet" href="<%=media%>/cascade.css?v=git-22.288.45155-afd0012">
-								<link rel="shortcut icon" href="<%=media%>/favicon.png">
+								<link rel="stylesheet" href="<%=media%>/cascade.css?v=25.168.50434~d6b13f6">
+								<link rel="icon" href="<%=media%>/favicon.ico" sizes="any">
+
+								<!-- PWA Manifest & Service Worker -->
+								<link rel="manifest" href="<%=media%>/PWA/manifest.json">
+								<meta name="theme-color" content="#000000ff">
+								<script>
+									if ('serviceWorker' in navigator) {
+										window.addEventListener('load', function () {
+											navigator.serviceWorker.register('<%=media%>/PWA/sw.js')
+												.then(function (registration) { console.log('SW registered:', registration); })
+												.catch(function (error) { console.log('SW registration failed:', error); });
+										});
+									}
+								</script>
 
 								<% if node and node.css then %>
 									<link rel="stylesheet" href="<%=resource%>/<%=node.css%>">
@@ -43,10 +56,13 @@
 											</style>
 											<% end -%>
 
+												<!-- Chart.js -->
+												<script src="<%=media%>/js/chart.umd.min.js"></script>
+
 												<!-- Scripts -->
 												<script
-													src="<%=url('admin/translations', luci.i18n.context.lang)%>?v=git-22.288.45155-afd0012"></script>
-												<script src="<%=resource%>/cbi.js?v=git-22.288.45155-afd0012"></script>
+													src="<%=url('admin/translations', luci.i18n.context.lang)%>?v=25.168.50434~d6b13f6"></script>
+												<script src="<%=resource%>/cbi.js?v=25.168.50434~d6b13f6"></script>
 
 												<style>
 													body {
