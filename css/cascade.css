@@ -162,9 +162,7 @@
     color-scheme: dark;
 }
 
-/* -----------------------------------------------------------------------
-   CUSTOM SCROLLBAR
-   ----------------------------------------------------------------------- */
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -178,7 +176,7 @@
     background-color: var(--border-medium);
     border-radius: 6px;
     border: 2px solid var(--bg-main);
-    /* Creates a padding effect */
+    
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -1155,14 +1153,14 @@ a.menu:after {
     left: 159px
 }
 
-/* Tab Menu - Adaptive for Dark/Light Mode */
+
 .tabs,
 .cbi-tabmenu {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
     background: var(--bg-panel, #f5f5f5);
-    /* Light background for light mode */
+    
     margin: 0.5rem 0;
     padding: 8px;
     gap: 8px;
@@ -1179,7 +1177,7 @@ a.menu:after {
     height: auto;
     min-height: 36px;
     margin: 0;
-    /* Active State */
+    
     background: var(--primary-main, #1976d2);
     border: 1px solid transparent;
     border-radius: 8px;
@@ -1208,7 +1206,7 @@ a.menu:after {
     font-size: 0.9rem;
 }
 
-/* Inactive State */
+
 .tabs>li:not(.active),
 .cbi-tabmenu>.cbi-tab-disabled {
     background: transparent;
@@ -1220,7 +1218,7 @@ a.menu:after {
 }
 
 
-/* Hover State for Inactive */
+
 .tabs>li:not(.active):hover,
 .cbi-tabmenu>.cbi-tab-disabled:hover {
     background: var(--bg-hover, #f0f0f0);
@@ -1229,7 +1227,7 @@ a.menu:after {
     box-shadow: none;
 }
 
-/* Dark Theme Override */
+
 [data-theme="dark"] .tabs,
 [data-theme="dark"] .cbi-tabmenu {
     background: rgba(0, 0, 0, 0.3);
@@ -2683,18 +2681,16 @@ li.menu,
     }
 }
 
-/* ========================================
-   MODERN DASHBOARD STYLES
-   ======================================== */
 
-/* Modern Layout */
+
+
 .login-page {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     width: 100%;
-    /* Background Image with Gradient Overlay */
+    
     background: linear-gradient(135deg, rgba(15, 32, 39, 0.85) 0%, rgba(32, 58, 67, 0.85) 50%, rgba(44, 83, 100, 0.85) 100%),
         url('../login-bg.jpg') no-repeat center center fixed;
     background-size: cover;
@@ -2713,7 +2709,7 @@ li.menu,
     background: var(--bg-main);
 }
 
-/* Sidebar Styles */
+
 .sidebar {
     width: 260px;
     background: linear-gradient(180deg, #8B5CF6 0%, #EC4899 100%);
@@ -2811,16 +2807,16 @@ li.menu,
     justify-content: center;
 }
 
-/* Sidebar Submenu */
+
 .sidebar-submenu {
     list-style: none;
     margin: 0;
     padding: 0;
     margin-left: 1.5rem;
-    /* var(--spacing-lg) */
+    
     border-left: 2px solid rgba(255, 255, 255, 0.2);
 
-    /* Animation props */
+    
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -2829,10 +2825,10 @@ li.menu,
 
 .sidebar-submenu.expanded {
     max-height: 1000px;
-    /* Arbitrary large height */
+    
     opacity: 1;
     margin-top: 0.25rem;
-    /* var(--spacing-xs) */
+    
 }
 
 .sidebar-submenu-item {
@@ -2842,15 +2838,15 @@ li.menu,
 .sidebar-submenu-link {
     display: block;
     padding: 0.6rem 1rem;
-    /* var(--spacing-xs) var(--spacing-md) increased */
+    
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     border-radius: 4px;
-    /* var(--radius-sm) */
+    
     transition: all 0.2s ease;
     font-size: 0.95rem;
     margin-left: 0.5rem;
-    /* var(--spacing-sm) */
+    
 }
 
 .sidebar-submenu-link:hover {
@@ -2859,7 +2855,7 @@ li.menu,
     text-decoration: none;
 }
 
-/* Active State Styles */
+
 .sidebar-nav-link.active {
     background: rgba(255, 255, 255, 0.2);
     color: white;
@@ -2870,7 +2866,7 @@ li.menu,
 .sidebar-submenu-link.active {
     background: white;
     color: var(--primary-color);
-    /* Use primary color text on white bg */
+    
     font-weight: 600;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -2887,7 +2883,7 @@ li.menu,
     transform: rotate(90deg);
 }
 
-/* Main Wrapper */
+
 .main-wrapper {
     flex: 1;
     margin-left: 260px;
@@ -2895,23 +2891,23 @@ li.menu,
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Removed explicit width which caused overflow with margin */
+    
     width: auto;
     overflow-x: hidden;
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-/* Main Content Container */
+
 .dashboard-container {
     padding: 2rem;
     width: 100%;
     margin-top: var(--header-height);
-    /* Offset for fixed header */
+    
 }
 
 
 
-/* Mobile Responsive */
+
 @media screen and (max-width: 768px) {
     .main-wrapper {
         margin-left: 0;
@@ -2924,8 +2920,8 @@ li.menu,
     }
 }
 
-/* Top Header */
-/* Top Header */
+
+
 .top-header {
     background: #FFFFFF;
     color: #333333;
@@ -2935,15 +2931,15 @@ li.menu,
     align-items: center;
     justify-content: space-between;
     position: fixed;
-    /* Changed from sticky */
+    
     top: 0;
     right: 0;
     left: var(--sidebar-width);
-    /* Matches sidebar width */
+    
     height: var(--header-height);
     z-index: 100;
     width: auto;
-    /* Let left/right define width */
+    
     transition: left 0.3s ease, width 0.3s ease;
 }
 
@@ -2985,10 +2981,10 @@ li.menu,
     align-items: center;
     gap: 0.5rem;
     z-index: 101;
-    /* Ensure icons are above other content */
+    
 }
 
-/* Ensure header buttons/icons are visible */
+
 .top-header button,
 .top-header svg {
     pointer-events: auto;
@@ -2996,7 +2992,7 @@ li.menu,
     opacity: 1;
 }
 
-/* Header Status Indicators */
+
 .header-indicators {
     display: flex;
     align-items: center;
@@ -3100,15 +3096,15 @@ li.menu,
 
 .header-logout-btn:hover {
     background-color: rgba(211, 47, 47, 0.1);
-    /* Light red background */
+    
     color: var(--error-main);
     border-color: rgba(211, 47, 47, 0.2);
 }
 
-/* Dashboard Grid */
+
 .dashboard-container {
     padding: 2rem;
-    /* var(--spacing-xl) */
+    
     flex: 1;
 }
 
@@ -3116,20 +3112,20 @@ li.menu,
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
-    /* var(--spacing-lg) */
+    
     margin-bottom: 2rem;
-    /* var(--spacing-xl) */
+    
 }
 
-/* Stat Card */
+
 .stat-card {
     background: var(--bg-card);
     border-radius: 8px;
-    /* var(--radius-md) */
+    
     padding: 1.5rem;
-    /* var(--spacing-lg) */
+    
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    /* var(--shadow-md) */
+    
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -3158,14 +3154,14 @@ li.menu,
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 0.25rem;
-    /* var(--spacing-xs) */
+    
 }
 
 .stat-change {
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    /* var(--spacing-md) */
+    
 }
 
 .stat-change.positive {
@@ -3180,20 +3176,20 @@ li.menu,
     width: 100%;
     height: 60px;
     margin-top: 1rem;
-    /* var(--spacing-md) */
+    
 }
 
-/* Chart Card */
+
 .chart-card {
     background: var(--bg-card);
     border-radius: 8px;
-    /* var(--radius-md) */
+    
     padding: 1.5rem;
-    /* var(--spacing-lg) */
+    
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    /* var(--shadow-md) */
+    
     margin-bottom: 1.5rem;
-    /* var(--spacing-lg) */
+    
 }
 
 .chart-card h3 {
@@ -3212,7 +3208,7 @@ li.menu,
     max-height: 100%;
 }
 
-/* Dashboard Layout Grid */
+
 .dashboard-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -3231,7 +3227,7 @@ li.menu,
     gap: var(--spacing-lg);
 }
 
-/* Recent Problems Card */
+
 .problems-card {
     background: var(--bg-card);
     border-radius: var(--radius-md);
@@ -3273,7 +3269,7 @@ li.menu,
     color: var(--text-muted);
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
     .dashboard-layout {
         grid-template-columns: 1fr;
@@ -3302,7 +3298,7 @@ li.menu,
 
     .dashboard-container {
         padding: 1rem;
-        /* var(--spacing-md) */
+        
         width: 100%;
         overflow-x: hidden;
     }
@@ -3321,9 +3317,9 @@ li.menu,
         left: 0;
         width: 100%;
         background: var(--bg-card);
-        /* Theme aware */
+        
         z-index: 80;
-        /* Below Toasts (90) and Sidebar (1000) */
+        
     }
 
     .top-header-title {
@@ -3331,7 +3327,7 @@ li.menu,
     }
 }
 
-/* Mobile Menu Toggle */
+
 .mobile-menu-toggle {
     display: none;
     width: 40px;
@@ -3361,7 +3357,7 @@ li.menu,
     }
 }
 
-/* Utility Classes */
+
 .text-purple {
     color: var(--primary-purple);
 }
@@ -3410,19 +3406,17 @@ li.menu,
     background-color: var(--accent-green);
 }
 
-/* ========================================
-   TOAST NOTIFICATION STYLES
-   ======================================== */
+
 
 .toast-notification {
-    /* Reset fixed positioning for container support */
+    
     position: relative;
     top: auto;
     right: auto;
     width: 350px;
     max-width: calc(100vw - 40px);
     background: var(--bg-card);
-    /* Theme aware */
+    
     backdrop-filter: blur(10px);
     border-radius: var(--radius-md);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -3435,7 +3429,7 @@ li.menu,
     animation: toastSlideIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     transition: all 0.3s ease;
     margin-bottom: 10px;
-    /* Spacing for stacking */
+    
     flex-shrink: 0;
 }
 
@@ -3529,9 +3523,7 @@ li.menu,
     }
 }
 
-/* ========================================
-   HEADER INDICATOR STYLES
-   ======================================== */
+
 
 .header-indicators {
     display: flex;
@@ -3561,14 +3553,14 @@ li.menu,
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* Polling Status Active (Refreshing) */
+
 .header-indicator[data-style="active"] {
     background: rgba(16, 185, 129, 0.1);
     color: var(--accent-green);
     border-color: rgba(16, 185, 129, 0.2);
 }
 
-/* Unsaved Changes */
+
 .header-indicator[data-indicator="uci-changes"] {
     background: rgba(239, 68, 68, 0.1);
     color: #EF4444;
@@ -3578,23 +3570,21 @@ li.menu,
 @media (max-width: 768px) {
     .header-indicators {
         display: flex;
-        /* Changed from none */
+        
         margin-right: var(--spacing-sm);
         gap: 4px;
-        /* Tighter gap for mobile */
+        
     }
 
     .header-indicator {
         font-size: 0.7rem;
-        /* Smaller text */
+        
         padding: 0.15rem 0.5rem;
-        /* Smaller padding */
+        
     }
 }
 
-/* ========================================
-   TYPEWRITER CURSOR
-   ======================================== */
+
 #typewriter-text::after {
     content: '|';
     animation: blink-cursor 1s step-end infinite;
@@ -3623,38 +3613,36 @@ li.menu,
     }
 }
 
-/* ========================================
-   ALERT AS TOAST STYLES
-   ======================================== */
 
-/* Toast Container for Stacking */
+
+
 .toast-container {
     position: fixed;
     top: 90px;
     right: 20px;
     z-index: 2000;
-    /* Lower z-index to sit behind sidebar/modals */
+    
     display: flex;
     flex-direction: column;
-    /* Removed gap to allow smoother margin animation on children */
+    
     align-items: flex-end;
-    /* Ensure all toasts align to the right */
+    
     pointer-events: none;
-    /* Allow clicks to pass through container */
+    
 }
 
 .alert-message.fade-in {
-    /* DEFAULT: Fixed positioning for "orphan" alerts (not moved to container yet) */
+    
     position: fixed;
     top: 90px;
     right: 20px;
     z-index: 90;
 
     width: 300px;
-    /* Reduced width */
+    
     max-width: calc(100vw - 40px);
     background: var(--bg-card);
-    /* Use theme variable */
+    
     backdrop-filter: blur(10px);
     border-radius: var(--radius-md);
 
@@ -3663,7 +3651,7 @@ li.menu,
         0 8px 10px -6px rgba(0, 0, 0, 0.1);
     padding: 1rem;
     pointer-events: auto;
-    /* Re-enable clicks on toasts */
+    
     border: none;
     border-left: 4px solid var(--primary-color);
     display: flex;
@@ -3674,12 +3662,12 @@ li.menu,
     white-space: normal;
     color: var(--text-primary);
     margin-bottom: 10px;
-    /* Use margin instead of gap for animation */
+    
     flex-shrink: 0;
-    /* Prevent shrinking in flex container */
+    
 }
 
-/* OVERRIDE: Relative positioning when inside the container (for stacking) */
+
 .toast-container .alert-message.fade-in,
 .toast-container .toast-notification {
     position: relative;
@@ -3689,7 +3677,7 @@ li.menu,
     z-index: auto;
 }
 
-/* Slide Out Animation */
+
 .alert-message.fade-in.fade-out,
 .toast-notification.fade-out {
     animation: toastSlideOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -3700,7 +3688,7 @@ li.menu,
         opacity: 1;
         transform: translateX(0);
         max-height: 200px;
-        /* Arbitrary large height */
+        
         margin-bottom: 10px;
         padding: 1rem;
     }
@@ -3708,7 +3696,7 @@ li.menu,
     40% {
         opacity: 0;
         transform: translateX(100%);
-        /* Slide out first */
+        
         max-height: 200px;
         margin-bottom: 10px;
         padding: 1rem;
@@ -3718,7 +3706,7 @@ li.menu,
         opacity: 0;
         transform: translateX(100%);
         max-height: 0;
-        /* Then collapse */
+        
         margin-bottom: 0;
         padding: 0;
         border: 0;
@@ -3766,10 +3754,10 @@ li.menu,
     border: none;
     padding: 0;
     list-style: none;
-    /* Remove default list bullets if any */
+    
 }
 
-/* Close button - override typical alert close button styles */
+
 .alert-message.fade-in .close {
     position: absolute;
     top: 1rem;
@@ -3792,7 +3780,7 @@ li.menu,
     color: var(--text-primary);
 }
 
-/* Footer & Header Theme Support */
+
 .main-footer {
     background: var(--bg-card);
     padding: 1rem 2rem;
@@ -3806,20 +3794,20 @@ li.menu,
     transition: background-color 0.3s ease;
 }
 
-/* CBI Section Cards */
+
 .cbi-section,
 .cbi-map,
 .cbi-map-descr,
 .cbi-section-descr {
     background: var(--bg-card);
     border-radius: 8px;
-    /* var(--radius-md) */
+    
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    /* var(--shadow-sm) */
+    
     padding: 1.5rem;
-    /* var(--spacing-lg) */
+    
     margin-bottom: 1.5rem;
-    /* var(--spacing-lg) */
+    
     border: 1px solid var(--border-color-low);
 }
 
@@ -3833,11 +3821,7 @@ li.menu,
     padding-right: 0;
 }
 
-/* Reset map/descr if they are wrappers, typically we only want the section boxed, 
-   but sometimes cbi-map is the container. 
-   Actually, usually cbi-section is the child. 
-   Let's be specific to avoiding double-boxing.
-*/
+
 
 .cbi-section {
     background: var(--bg-card);
@@ -3847,27 +3831,27 @@ li.menu,
     margin-bottom: var(--spacing-lg);
     border: 1px solid var(--border-color-low);
     overflow: hidden;
-    /* Contains floats */
+    
 }
 
-/* Header inside box */
-/* Header inside box */
-/* Header inside box */
+
+
+
 .cbi-section h3,
 .cbi-map h3 {
     margin-top: 0;
     padding-bottom: var(--spacing-md);
     border-bottom: none;
-    /* Removed as requested */
+    
     margin-bottom: 1rem;
-    /* var(--spacing-md) */
+    
     padding-left: 0;
-    /* Let container padding handle it, or use small value if needed */
+    
 }
 
 
 
-/* Remove all internal borders from tables inside cards */
+
 .cbi-section-table .tr,
 .cbi-section-table .td,
 .cbi-section-table .th,
@@ -3879,10 +3863,7 @@ li.menu,
     border-top: none !important;
 }
 
-/* ========================================
-   MERGED MOBILE STYLES
-   From mobile.css (Cleaned & Responsive)
-   ======================================== */
+
 
 @media screen and (max-width: 768px) {
 
@@ -3913,7 +3894,7 @@ li.menu,
         padding: 0 8px;
     }
 
-    /* Convert Table to Flex Stack */
+    
     .table {
         display: flex;
         flex-direction: column;
@@ -3947,7 +3928,7 @@ li.menu,
         overflow: visible;
     }
 
-    /* Grid Columns */
+    
     .col-1 {
         flex: 1 1 30px !important;
     }
@@ -4211,7 +4192,7 @@ li.menu,
         padding: 0 0 14px;
     }
 
-    /* Centered Typography for Mobile */
+    
     h2 {
         text-align: center;
         margin-top: 1.5rem;
@@ -4255,9 +4236,7 @@ li.menu,
     }
 }
 
-/* ========================================
-   LOGIN PAGE STYLES
-   ======================================== */
+
 
 .login-page {
     display: flex;
@@ -4361,9 +4340,7 @@ li.menu,
     text-align: left;
 }
 
-/* ========================================
-   LOGIN PAGE STYLES
-   ======================================== */
+
 
 .login-page {
     display: flex;
@@ -4509,9 +4486,7 @@ li.menu,
     fill: currentColor;
 }
 
-/* ========================================
-   CUSTOM SCROLLBAR
-   ======================================== */
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -4530,7 +4505,7 @@ li.menu,
     background-color: var(--text-secondary, #999);
 }
 
-/* Fix Header Gap and Alignment (Global) */
+
 body {
     margin: 0;
     padding: 0;
@@ -4550,7 +4525,7 @@ header {
     width: 100%;
 }
 
-/* High Specificity Reset for Gap Fix */
+
 html,
 body {
     margin: 0 !important;
@@ -4559,7 +4534,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Override potential padding on layout containers with high specificity */
+
 body .modern-layout {
     padding: 0 !important;
     margin: 0 !important;
@@ -4571,14 +4546,14 @@ body .modern-layout {
 body .modern-layout .main-wrapper {
     padding: 0 !important;
     margin-right: 0 !important;
-    /* margin-left: 260px is handled by original CSS or JS */
+    
     width: auto;
     max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Header/Footer Width Fix */
-/* Header/Footer Width Fix - Removed to prevent off-screen overflow */
+
+
 
 .main-footer {
     margin: 0 !important;
@@ -4588,128 +4563,45 @@ body .modern-layout .main-wrapper {
 }
 
 @media (max-width: 768px) {
-    /* Mobile-specific adjustments if needed */
+    
 }
 
-/* -----------------------------------------------------------------------
-   FIX: Tab Switching Layout Bug
-   Force hidden tabs to be completely removed from layout flow.
-   ----------------------------------------------------------------------- */
-[data-tab-active="false"],
-.cbi-tab[data-tab-active="false"],
-.container[data-tab-active="false"],
-.cbi-section[data-tab-active="false"] {
-    display: none !important;
-}
 
-/* Ensure CBI tab containers don't collapse improperly */
+
+
 .cbi-section-node {
     display: block;
     width: 100%;
 }
 
-/* ========================================
-   MOBILE BOTTOM NAVIGATION
-   ======================================== */
-
-.mobile-bottom-nav {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.85);
-    /* Dark blue/slate background */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    /* Pill shape */
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 90%;
-    max-width: 400px;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mobile-nav-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.6);
-    padding: 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    text-decoration: none !important;
-}
-
-.mobile-nav-item svg {
-    width: 24px;
-    /* Icons size from example */
-    height: 24px;
-    stroke-width: 2px;
-}
-
-.mobile-nav-item:hover,
-.mobile-nav-item.active {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-.mobile-nav-item.active {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    /* Optional: colored active state like the example green bar, 
-       but pill background highlight is cleaner for this style */
-}
-
-/* Show only on mobile */
-@media screen and (max-width: 768px) {
-    .mobile-bottom-nav {
-        display: flex;
-    }
-
-    /* Adjust main content padding so it doesn't get covered */
-    .dashboard-container {
-        padding-bottom: 90px !important;
-    }
-
-    footer.main-footer {
-        padding-bottom: 80px !important;
-    }
-}
 
 
-/* ========================================
-   MOBILE BOTTOM NAVIGATION & CONFIG MODAL
-   (Adaptive Light/Dark Mode)
-   ======================================== */
 
-/* --- Default Light Mode Variables for Navbar (MacOS Style) --- */
+
+
+
 :root {
     --mnav-bg: rgba(255, 255, 255, 0.65);
-    /* High transparency for glass */
+    
     --mnav-border: rgba(255, 255, 255, 0.4);
     --mnav-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     --mnav-item-color: #555;
     --mnav-item-hover-bg: rgba(0, 0, 0, 0.05);
     --mnav-item-active-color: #000;
     --mnav-item-active-bg: rgba(255, 255, 255, 0.8);
-    /* White highlight */
+    
     --mnav-item-active-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-    /* Modal Specifics */
+    
     --mnav-modal-input-bg: rgba(255, 255, 255, 0.5);
     --mnav-modal-input-border: rgba(0, 0, 0, 0.1);
     --mnav-modal-text: #333;
 }
 
-/* --- Dark Mode Overrides (MacOS Style) --- */
+
 [data-theme="dark"] {
     --mnav-bg: rgba(30, 30, 30, 0.60);
-    /* Dark transparency */
+    
     --mnav-border: rgba(255, 255, 255, 0.12);
     --mnav-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     --mnav-item-color: rgba(255, 255, 255, 0.55);
@@ -4718,14 +4610,14 @@ body .modern-layout .main-wrapper {
     --mnav-item-active-bg: rgba(255, 255, 255, 0.15);
     --mnav-item-active-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 
-    /* Modal Specifics */
+    
     --mnav-modal-input-bg: rgba(0, 0, 0, 0.3);
     --mnav-modal-input-border: rgba(255, 255, 255, 0.1);
     --mnav-modal-text: #fff;
 }
 
 
-/* --- Navbar Styles --- */
+
 .mobile-bottom-nav {
     display: flex;
     position: fixed;
@@ -4739,7 +4631,7 @@ body .modern-layout .main-wrapper {
     transition: all 0.3s ease;
 }
 
-/* Mobile: Horizontal Bottom */
+
 @media screen and (max-width: 768px) {
     .mobile-bottom-nav {
         bottom: 20px;
@@ -4754,19 +4646,19 @@ body .modern-layout .main-wrapper {
         align-items: center;
     }
 
-    /* Compact mode for > 5 items */
-    /* Compact mode for > 5 items */
+    
+    
     .mobile-bottom-nav.compact {
         padding: 0.4rem 0.5rem;
-        /* Reduced height and horizontal padding */
+        
         gap: 2px;
         max-width: 95%;
-        /* Allow full width if needed */
+        
     }
 
     .mobile-bottom-nav.compact .mobile-nav-item {
         padding: 4px;
-        /* Smaller touch target padding */
+        
         flex-shrink: 1;
         min-width: 30px;
     }
@@ -4778,7 +4670,7 @@ body .modern-layout .main-wrapper {
     }
 }
 
-/* Desktop: Vertical Right */
+
 @media screen and (min-width: 769px) {
     .mobile-bottom-nav {
         top: 50%;
@@ -4799,7 +4691,7 @@ body .modern-layout .main-wrapper {
         transform: translateY(-50%) translateX(100%) !important;
     }
 
-    /* Toggle button for desktop - Always visible */
+    
     .mobile-nav-toggle {
         display: flex !important;
         align-items: center;
@@ -4837,19 +4729,19 @@ body .modern-layout .main-wrapper {
         transform: rotate(180deg);
     }
 
-    /* Add separator after toggle */
+    
     .mobile-nav-toggle+.mobile-nav-item {
         margin-top: 0.5rem;
         padding-top: 0.5rem;
     }
 
-    /* Adjust nav items on desktop */
+    
     .mobile-bottom-nav .mobile-nav-item {
         width: 44px;
         height: 44px;
     }
 
-    /* Ensure navbar is always visible on desktop */
+    
     .mobile-bottom-nav {
         display: flex !important;
     }
@@ -4881,13 +4773,13 @@ body .modern-layout .main-wrapper {
     transform: scale(1.05);
 }
 
-/* Hide toggle button on mobile */
+
 .mobile-nav-toggle {
     display: none;
 }
 
 
-/* --- Modal Styles --- */
+
 .nav-config-modal {
     position: fixed;
     top: 0;
@@ -4912,7 +4804,7 @@ body .modern-layout .main-wrapper {
 
 .nav-config-card {
     background: var(--bg-card);
-    /* Uses main theme card bg */
+    
     width: 90%;
     max-width: 400px;
     max-height: 80vh;
@@ -4923,7 +4815,7 @@ body .modern-layout .main-wrapper {
     flex-direction: column;
     overflow: hidden;
     color: var(--text-primary);
-    /* Uses main theme text color */
+    
     border: 1px solid var(--border-light);
 }
 
@@ -4959,7 +4851,7 @@ body .modern-layout .main-wrapper {
 
 .nav-item-editor {
     background: var(--bg-hover);
-    /* Light gray in light mode, dark in dark mode */
+    
     border-radius: 8px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -5033,23 +4925,23 @@ textarea.form-control {
     color: var(--text-secondary);
 }
 
-/* Edit Trigger specific size for circle */
+
 .mobile-nav-edit-trigger {
     width: 44px;
-    /* Ensure circular target size */
+    
     height: 44px;
     padding: 0;
     margin-left: 5px;
 }
 
 
-/* --- Mobile Visibility --- */
+
 @media screen and (max-width: 768px) {
     .mobile-bottom-nav {
         display: flex;
     }
 
-    /* Adjust main content padding so it doesn't get covered */
+    
     .dashboard-container {
         padding-bottom: 90px !important;
     }
@@ -5059,9 +4951,7 @@ textarea.form-control {
     }
 }
 
-/* ========================================
-   PAGE LOADING SCREEN
-   ======================================== */
+
 
 #page-loader {
     position: fixed;
@@ -5262,7 +5152,7 @@ textarea.form-control {
     transform: rotate(90deg);
 }
 
-/* Fix untuk tab content yang hidden - tidak boleh mengambil space */
+
 [data-tab-active="false"],
 .cbi-tab[data-tab-active="false"],
 .container[data-tab-active="false"],
@@ -5274,7 +5164,7 @@ textarea.form-control {
     padding: 0 !important;
 }
 
-/* Pastikan tab content yang aktif ditampilkan dengan benar */
+
 [data-tab-active="true"],
 .cbi-tab[data-tab-active="true"],
 .container[data-tab-active="true"],
@@ -5283,7 +5173,7 @@ textarea.form-control {
     height: auto !important;
 }
 
-/* Fix untuk elemen yang di-hide tapi masih mengambil space */
+
 .hidden,
 [style*="display: none"],
 [style*="visibility: hidden"] {
@@ -5293,8 +5183,19 @@ textarea.form-control {
     padding: 0 !important;
 }
 
-/* Pastikan tab pane yang tidak aktif tidak mengambil space */
+
 .tab-content>.tab-pane:not(.active),
 .tab-content>div:not([data-tab-active="true"]) {
     display: none !important;
+}
+
+
+.cbi-map-tabbed>.cbi-section:not([data-tab-active="true"]),
+.cbi-map-tabbed>div[data-tab]:not([data-tab-active="true"]) {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    visibility: hidden !important;
 }
