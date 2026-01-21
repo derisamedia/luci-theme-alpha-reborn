@@ -26,6 +26,8 @@
 [![group][group-badge]][group]
 [![discord][discord-badge]][discord]
 [![paypal][paypal-badge]][paypal]
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y61SPCLW)
+
 
 
 Luci theme for Official Openwrt and Alpha OS build ,based on bootstrap luCi theme refferences,
