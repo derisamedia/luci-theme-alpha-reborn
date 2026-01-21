@@ -9,8 +9,6 @@
 [paypal]: https://www.paypal.com/paypalme/derisamedia
 [paypal-badge]: https://img.shields.io/badge/Donate-Paypal_me-blue
 
-<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'Y8Y61SPCLW');kofiwidget2.draw();</script> 
-
 
 
 
