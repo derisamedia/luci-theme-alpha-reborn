@@ -26,7 +26,6 @@
 [![group][group-badge]][group]
 [![discord][discord-badge]][discord]
 [![paypal][paypal-badge]][paypal]
-[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y61SPCLW)
 
 
 
@@ -34,6 +33,7 @@ Luci theme for Official Openwrt and Alpha OS build ,based on bootstrap luCi them
 Thanks To Komunitas Device Berbasis ARM Indonesia (DBAI) for support this theme.
 This official 2'nd theme in Indo-Wrt Community in indonesia. Not the result of modification from anyone, this is purely made by us
 ### ©Derisamedia
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y61SPCLW)
 <summary>Preview Screenshoot</summary>
 <p>
   
