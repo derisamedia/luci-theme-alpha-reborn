@@ -66,7 +66,22 @@
                 }
 
                 function transformAndMove(node) {
-                    if (node.nodeType === 1 && node.classList.contains('alert-message') && !node.classList.contains('processed-toast')) {
+                    // Start Exclusion Logic
+                    const textContent = (node.textContent || node.innerText || "").trim();
+                    const htmlContent = (node.innerHTML || "").trim();
+
+                    const isMwan = node.closest('#mwan3-service-status') || 
+                                  (node.parentElement && node.parentElement.id === 'mwan3-service-status') ||
+                                  textContent.includes('Interface:') ||
+                                  textContent.includes('Interface :') ||
+                                  (textContent.includes('Uptime:') && textContent.includes('Status:')) ||
+                                  htmlContent.includes('mwan3');
+
+                    if (node.nodeType === 1 && 
+                        node.classList.contains('alert-message') && 
+                        !node.classList.contains('processed-toast') && 
+                        !isMwan) {
+                        
                         node.classList.add('processed-toast');
 
                         const toast = document.createElement('div');
@@ -83,7 +98,7 @@
                         const h4 = node.querySelector('h4');
                         if (h4) {
                             titleText = h4.textContent;
-                            h4.remove();
+                            h4.remove(); // Safely remove h4 from cloned node later? No, we are parsing live node.
                         }
                         const existingClose = node.querySelector('.close');
                         if (existingClose) existingClose.remove();
@@ -98,8 +113,6 @@
                         const closeBtn = document.createElement('button');
                         closeBtn.className = 'toast-close';
                         closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
-                        closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
-                        // Click listener is handled genericly in initToastBehavior
 
                         header.appendChild(titleEl);
                         header.appendChild(closeBtn);
@@ -107,6 +120,7 @@
                         const body = document.createElement('div');
                         body.className = 'toast-message';
                         
+                        // Move children
                         while (node.firstChild) {
                             body.appendChild(node.firstChild);
                         }

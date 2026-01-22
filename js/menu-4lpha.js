@@ -636,8 +636,25 @@ return baseclass.extend({
         if (!container) return;
 
         const transformAndMove = (node) => {
+            // Get text content safely
+            const textContent = (node.textContent || node.innerText || "").trim();
+            const htmlContent = (node.innerHTML || "").trim();
+
+            // Explicitly exclude mwan3/MultiWAN content
+            // Check content keywords, parent ID, and closest selector
+            const isMwan = node.closest('#mwan3-service-status') ||
+                (node.parentElement && node.parentElement.id === 'mwan3-service-status') ||
+                textContent.includes('Interface:') ||
+                textContent.includes('Interface :') ||
+                textContent.includes('Uptime:') ||
+                htmlContent.includes('mwan3');
+
             // Validation: Must be an element, an alert-message, and not already processed/in-container
-            if (node.nodeType === 1 && node.classList.contains('alert-message') && !node.classList.contains('processed-toast')) {
+            if (node.nodeType === 1 &&
+                node.classList.contains('alert-message') &&
+                !node.classList.contains('processed-toast') &&
+                !isMwan) {
+
 
                 // Mark as processed immediately
                 node.classList.add('processed-toast');

@@ -82,7 +82,20 @@
 							}
 
 							function transformAndMove(node) {
-								if (node.nodeType === 1 && node.classList.contains('alert-message') && !node.classList.contains('processed-toast')) {
+								var textContent = (node.textContent || node.innerText || "").trim();
+								var htmlContent = (node.innerHTML || "").trim();
+
+								var isMwan = node.closest('#mwan3-service-status') ||
+									(node.parentElement && node.parentElement.id === 'mwan3-service-status') ||
+									textContent.includes('Interface:') ||
+									textContent.includes('Interface :') ||
+									(textContent.includes('Uptime:') && textContent.includes('Status:')) ||
+									htmlContent.includes('mwan3');
+
+								if (node.nodeType === 1 &&
+									node.classList.contains('alert-message') &&
+									!node.classList.contains('processed-toast') &&
+									!isMwan) {
 									node.classList.add('processed-toast');
 
 									const toast = document.createElement('div');
