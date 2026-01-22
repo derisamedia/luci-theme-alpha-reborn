@@ -5194,7 +5194,7 @@ textarea.form-control {
     visibility: hidden !important;
 }
 
-
+/* MultiWAN Manager Status Cards */
 #mwan3-service-status {
     display: flex;
     flex-wrap: wrap;
@@ -5207,43 +5207,43 @@ textarea.form-control {
     border-radius: var(--radius-md);
     min-width: 200px;
     flex: 1 1 200px;
-    
+    /* Responsive flex basis */
     max-width: 100%;
     color: #fff;
-    
+    /* Ensure text is readable on colored backgrounds */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     border: none;
-    
+    /* Override default alert borders if any */
     animation: fadeIn 0.5s ease-in-out;
     margin-bottom: 0 !important;
-    
+    /* Override potential defaults */
     position: static;
-    
+    /* Force static positioning unlike toasts */
     opacity: 1;
-    
+    /* Ensure visible */
     transform: none;
     display: block !important;
-    
+    /* Force display in case JS hides it */
 }
 
-
+/* Ensure strong styles for success/warning in this specific context */
 #mwan3-service-status .alert-message.success {
     background-color: #10b981;
-    
+    /* Green */
     color: white;
     border-left: none;
 }
 
 #mwan3-service-status .alert-message.warning {
     background-color: #d97706;
-    
+    /* Amber/Gold */
     color: white;
     border-left: none;
 }
 
 #mwan3-service-status .alert-message.error {
     background-color: #ef4444;
-    
+    /* Red */
     color: white;
     border-left: none;
 }
@@ -5273,3 +5273,4 @@ textarea.form-control {
     }
 }
 
+/* Safety: End of file */
