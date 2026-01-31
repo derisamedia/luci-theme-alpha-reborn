@@ -40,7 +40,7 @@
 								<script>
 									if ('serviceWorker' in navigator) {
 										window.addEventListener('load', function () {
-											navigator.serviceWorker.register('<%=media%>/PWA/sw.js')
+											navigator.serviceWorker.register('<%=media%>/PWA/sw.js', { scope: '/' })
 												.then(function (registration) { console.log('SW registered:', registration); })
 												.catch(function (error) { console.log('SW registration failed:', error); });
 										});

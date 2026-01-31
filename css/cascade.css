@@ -5207,43 +5207,43 @@ textarea.form-control {
     border-radius: var(--radius-md);
     min-width: 200px;
     flex: 1 1 200px;
-    
+
     max-width: 100%;
     color: #fff;
-    
+
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     border: none;
-    
+
     animation: fadeIn 0.5s ease-in-out;
     margin-bottom: 0 !important;
-    
+
     position: static;
-    
+
     opacity: 1;
-    
+
     transform: none;
     display: block !important;
-    
+
 }
 
 
 #mwan3-service-status .alert-message.success {
     background-color: #10b981;
-    
+
     color: white;
     border-left: none;
 }
 
 #mwan3-service-status .alert-message.warning {
     background-color: #d97706;
-    
+
     color: white;
     border-left: none;
 }
 
 #mwan3-service-status .alert-message.error {
     background-color: #ef4444;
-    
+
     color: white;
     border-left: none;
 }
@@ -5272,4 +5272,3 @@ textarea.form-control {
         transform: translateY(0);
     }
 }
-

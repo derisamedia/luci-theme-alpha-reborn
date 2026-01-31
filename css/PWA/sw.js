@@ -1,9 +1,12 @@
 const CACHE_NAME = 'openwrt-alpha-v1';
 const ASSETS_TO_CACHE = [
-    './css/cascade.css',
-    './js/menu-bootstrap.js',
-    './alpha-os.png',
-    './brand.png',
+    '../cascade.css',
+    '../../resources/menu-4lpha.js',
+    '../alpha-os.png',
+    '../brand.png',
+    '../icon-pwa.png',
+    '../dashboard.png',
+    '../favicon.ico',
     './manifest.json'
 ];
 
@@ -36,7 +39,8 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
     // Check if request is for one of our static assets
-    const isStatic = ASSETS_TO_CACHE.some(asset => url.pathname.endsWith(asset.replace('.', '')));
+    // Simplified to check if pathname ends with the filename of cached assets
+    const isStatic = ASSETS_TO_CACHE.some(asset => url.pathname.endsWith(asset.split('/').pop()));
 
     if (isStatic) {
         // Cache First for known static assets
