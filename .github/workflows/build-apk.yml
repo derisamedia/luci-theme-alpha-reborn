@@ -33,9 +33,9 @@ jobs:
       - name: Download OpenWrt Snapshot SDK (x86_64)
         run: |
           SDK_URL="https://downloads.openwrt.org/snapshots/targets/x86/64"
-          SDK_FILE=$(curl -s "$SDK_URL/sha256sums" | grep 'openwrt-sdk' | grep '\.tar\.xz' | awk '{print $2}' | sed 's/^\*//')
+          SDK_FILE=$(curl -s "$SDK_URL/sha256sums" | grep 'openwrt-sdk' | grep '\.tar\.zst' | awk '{print $2}' | sed 's/^\*//')
           wget "$SDK_URL/$SDK_FILE"
-          tar -xf "$SDK_FILE"
+          tar -I zstd -xf "$SDK_FILE"
           SDK_DIR=$(find . -maxdepth 1 -type d -name "openwrt-sdk-*")
           mv "$SDK_DIR" openwrt-sdk
 
