@@ -17,7 +17,7 @@
 
 <div align="center">
 
-# luci-theme-alpha-reborn (BETA)
+# luci-theme-Arwi (BETA)
 
 <img src="https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/brand.png">
 
