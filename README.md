@@ -45,9 +45,7 @@ This official 2'nd theme in Indo-Wrt Community in indonesia. Not the result of m
 
 ![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/screenshoot/4.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/screenshoot/5.png)
 
-![image](https://raw.githubusercontent.com/derisamedia/luci-theme-alpha-reborn/master/screenshoot/6.png)
 
 </p>
 
