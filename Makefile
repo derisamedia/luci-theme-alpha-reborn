@@ -6,11 +6,11 @@
 
 include $(TOPDIR)/rules.mk
 
-THEME_NAME:=4lpha
-THEME_TITLE:=4lpha
+THEME_NAME:=Arwi
+THEME_TITLE:=Arwi
 
 PKG_NAME:=luci-theme-$(THEME_NAME)
-PKG_VERSION:=4.1.4_beta2
+PKG_VERSION:=4.2.2_beta1
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk

@@ -4,6 +4,12 @@
 
 return baseclass.extend({
     __init__() {
+        // Run 404 check
+        this.check404();
+
+        // Patch modal close animation
+        this.patchModalCloseAnimation();
+
         // Ensure ui.menu is available before loading
         if (ui && ui.menu && typeof ui.menu.load === 'function') {
             ui.menu.load().then(L.bind(this.render, this)).catch(function (err) {
@@ -13,6 +19,50 @@ return baseclass.extend({
             console.warn('LuCI menu system not available');
         }
     },
+
+    check404() {
+        const runCheck = () => {
+            const main = document.getElementById('maincontent');
+            if (!main) return;
+            const h2 = main.querySelector('h2');
+            const h2Text = h2 ? h2.textContent : '';
+            const errorCodeMatch = h2Text.match(/\d+/);
+            const errorCode = errorCodeMatch ? errorCodeMatch[0] : '404';
+            const has404 = h2 && (h2.textContent.includes('404') || h2.textContent.toLowerCase().includes('not found'));
+            const hasDispatch = main.querySelector('tt') && main.querySelector('tt').textContent.includes('Unable to dispatch');
+            
+            if (has404 || hasDispatch) {
+                document.body.classList.add('page-404-active');
+                
+                const dispatchError = main.querySelector('tt') ? main.querySelector('tt').textContent : '';
+                
+                const container = document.createElement('div');
+                container.className = 'cont_principal';
+                container.innerHTML = `
+                    <div class="cont_error">
+                        <h1>${errorCode}</h1>  
+                        <p>The Page you're looking for isn't here.</p>
+                        ${dispatchError ? `<div class="error_detail">${dispatchError}</div>` : ''}
+                        <a href="${(L && typeof L.url === 'function') ? L.url('admin/status/overview') : '/'}" class="btn_home">Back to Dashboard</a>
+                    </div>
+                    <div class="cont_aura_1"></div>
+                    <div class="cont_aura_2"></div>
+                `;
+                document.body.appendChild(container);
+                
+                setTimeout(() => {
+                    container.classList.add('cont_error_active');
+                }, 100);
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', runCheck);
+        } else {
+            runCheck();
+        }
+    },
+
 
     render(tree) {
         let node = tree;
@@ -141,8 +191,12 @@ return baseclass.extend({
         }
 
         config.forEach(item => {
+            const currentPath = (L && L.env && L.env.requestpath) ? L.env.requestpath.join('/') : '';
+            const isRequestMatch = currentPath && currentPath.includes(item.name);
+            const isUrlMatch = window.location.href.includes(item.url) || window.location.pathname.includes(item.url);
+            const isActive = isRequestMatch || isUrlMatch;
             const link = E('a', {
-                'class': 'mobile-nav-item',
+                'class': 'mobile-nav-item' + (isActive ? ' active' : ''),
                 'href': item.url
             });
 
@@ -614,21 +668,7 @@ return baseclass.extend({
         const target = document.getElementById('typewriter-text');
         if (!target || !window.boardInfoConfig) return;
 
-        const text = 'Hello! ' + (window.boardInfoConfig.hostname || 'User');
-        let charIndex = 0;
-        let typeSpeed = 100;
-
-        const type = () => {
-            target.textContent = text.substring(0, charIndex + 1);
-            charIndex++;
-
-            if (charIndex < text.length) {
-                setTimeout(type, typeSpeed);
-            }
-        };
-
-        // Start typing
-        type();
+        target.textContent = 'Hello! ' + (window.boardInfoConfig.hostname || 'User');
     },
 
     initToastSystem() {
@@ -722,6 +762,64 @@ return baseclass.extend({
                 // Hide original strongly
                 node.style.setProperty('display', 'none', 'important');
                 container.appendChild(toast);
+
+                // Swipe-to-dismiss gestures for mobile
+                let startX = 0, startY = 0;
+                let diffX = 0, diffY = 0;
+                let isDragging = false;
+
+                toast.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    isDragging = true;
+                    toast.style.transition = 'none';
+                }, { passive: true });
+
+                toast.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    diffX = e.touches[0].clientX - startX;
+                    diffY = e.touches[0].clientY - startY;
+
+                    // Swipe up to dismiss, or left/right to throw away
+                    if (diffY < 0) {
+                        toast.style.transform = `translateY(${diffY}px) scale(${Math.max(0.85, 1 + diffY / 500)})`;
+                        toast.style.opacity = Math.max(0, 1 + diffY / 100);
+                    } else if (Math.abs(diffX) > 10) {
+                        toast.style.transform = `translateX(${diffX}px)`;
+                        toast.style.opacity = Math.max(0, 1 - Math.abs(diffX) / 250);
+                    }
+                }, { passive: true });
+
+                toast.addEventListener('touchend', () => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    toast.style.transition = 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+                    if (diffY < -50 || Math.abs(diffX) > 100) {
+                        // Dismiss notification
+                        if (diffY < -50) {
+                            toast.style.transform = 'translateY(-120px) scale(0.8)';
+                        } else {
+                            toast.style.transform = `translateX(${diffX > 0 ? 400 : -400}px)`;
+                        }
+                        toast.style.opacity = '0';
+                        setTimeout(() => toast.remove(), 300);
+                    } else {
+                        // Spring snapback
+                        toast.style.transform = '';
+                        toast.style.opacity = '';
+                    }
+                    diffX = 0;
+                    diffY = 0;
+                });
+
+                // Auto close after 3 seconds (3000ms)
+                setTimeout(() => {
+                    if (toast && toast.parentNode) {
+                        toast.classList.add('fade-out');
+                        toast.addEventListener('animationend', () => toast.remove());
+                    }
+                }, 3000);
             }
         };
 
@@ -744,7 +842,102 @@ return baseclass.extend({
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
+    },
 
+    patchModalCloseAnimation() {
+        const patchObj = (obj) => {
+            if (!obj || obj._modalPatched) return;
+            obj._modalPatched = true;
 
+            if (typeof obj.hideModal === 'function') {
+                const origHide = obj.hideModal;
+                obj.hideModal = function() {
+                    const overlay = document.getElementById('modal_overlay');
+                    const modal = overlay ? overlay.querySelector('.modal') : null;
+
+                    const doHide = () => {
+                        const res = origHide.apply(this, arguments);
+                        if (overlay) overlay.classList.remove('closing');
+                        if (modal) modal.classList.remove('closing');
+                        return res;
+                    };
+
+                    if (modal && document.body.classList.contains('modal-overlay-active') && !modal.dataset.isClosing) {
+                        modal.dataset.isClosing = 'true';
+                        modal.classList.add('closing');
+                        if (overlay) overlay.classList.add('closing');
+                        setTimeout(() => {
+                            delete modal.dataset.isClosing;
+                            modal.classList.remove('closing');
+                            if (overlay) overlay.classList.remove('closing');
+                            doHide();
+                        }, 200);
+                    } else {
+                        doHide();
+                    }
+                };
+            }
+
+            if (typeof obj.showModal === 'function') {
+                const origShow = obj.showModal;
+                obj.showModal = function() {
+                    const overlay = document.getElementById('modal_overlay');
+                    if (overlay) {
+                        overlay.classList.remove('closing');
+                        overlay.querySelectorAll('.modal').forEach(m => m.classList.remove('closing'));
+                    }
+                    return origShow.apply(this, arguments);
+                };
+            }
+        };
+
+        const tryPatch = () => {
+            if (window.ui) patchObj(window.ui);
+            if (window.L) patchObj(window.L);
+            if (typeof ui !== 'undefined') patchObj(ui);
+        };
+
+        tryPatch();
+        document.addEventListener('DOMContentLoaded', tryPatch);
+
+        // Observer to automatically clean up 'closing' class when a new modal opens
+        const bodyClassObserver = new MutationObserver(() => {
+            if (document.body.classList.contains('modal-overlay-active')) {
+                const overlay = document.getElementById('modal_overlay');
+                if (overlay && overlay.classList.contains('closing')) {
+                    overlay.classList.remove('closing');
+                    overlay.querySelectorAll('.modal').forEach(m => m.classList.remove('closing'));
+                }
+            }
+        });
+        bodyClassObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+        // Click interceptor for modal close buttons & overlay background
+        document.addEventListener('click', (e) => {
+            const overlay = document.getElementById('modal_overlay');
+            if (!overlay || !document.body.classList.contains('modal-overlay-active')) return;
+
+            const modal = overlay.querySelector('.modal');
+            if (!modal || modal.classList.contains('closing')) return;
+
+            const btn = e.target.closest('button, .btn, .cbi-button, input[type="button"], .close');
+            const isBackdrop = e.target === overlay;
+            const isClose = isBackdrop || (btn && (
+                btn.classList.contains('cbi-button-reset') ||
+                btn.classList.contains('cbi-button-neutral') ||
+                btn.classList.contains('close') ||
+                (btn.textContent && (
+                    btn.textContent.trim().toLowerCase() === 'close' ||
+                    btn.textContent.trim().toLowerCase() === 'cancel' ||
+                    btn.textContent.trim().toLowerCase() === 'revert' ||
+                    btn.textContent.trim().toLowerCase() === 'dismiss'
+                ))
+            ));
+
+            if (isClose) {
+                modal.classList.add('closing');
+                overlay.classList.add('closing');
+            }
+        }, true);
     }
 });
