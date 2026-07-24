@@ -1447,7 +1447,7 @@ footer ul.breadcrumb {
 #modal_overlay.closing {
     opacity: 0 !important;
     visibility: hidden !important;
-    transition: opacity 0.25s cubic-bezier(0.4, 0, 1, 1), visibility 0.25s cubic-bezier(0.4, 0, 1, 1) !important;
+    transition: opacity 0.18s ease, visibility 0.18s ease !important;
 }
 
 .modal {
@@ -1462,13 +1462,14 @@ footer ul.breadcrumb {
     margin: 10vh auto;
     padding: var(--spacing-lg);
     opacity: 0;
-    transform: translateY(60px) scale(0.93);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    transform: translateY(20px) scale(0.96);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, width 0.2s ease, max-width 0.2s ease;
+    overflow: hidden;
 }
 
 .modal.closing,
 .modal.fade-out {
-    animation: modalToastOut 0.25s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    animation: modalToastOut 0.18s cubic-bezier(0.4, 0, 1, 1) forwards !important;
 }
 
 .modal>* {
@@ -1512,13 +1513,13 @@ body.modal-overlay-active #modal_overlay {
 body.modal-overlay-active #modal_overlay .modal:not(.closing):not(.fade-out) {
     opacity: 1;
     transform: translateY(0) scale(1);
-    animation: modalToastIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: modalToastIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes modalToastIn {
     from {
         opacity: 0;
-        transform: translateY(60px) scale(0.93);
+        transform: translateY(25px) scale(0.96);
     }
     to {
         opacity: 1;
@@ -1533,7 +1534,7 @@ body.modal-overlay-active #modal_overlay .modal:not(.closing):not(.fade-out) {
     }
     to {
         opacity: 0;
-        transform: translateY(60px) scale(0.93);
+        transform: translateY(15px) scale(0.97);
     }
 }
 
@@ -5742,6 +5743,26 @@ textarea.form-control {
     margin: 0 !important;
     padding: 0 !important;
     visibility: hidden !important;
+}
+
+/* Smooth Tab Content Fade & Slide Animation */
+div[data-tab-active="true"],
+.cbi-tabcontainer[data-tab-active="true"],
+.tab-pane.active,
+.cbi-section-node-tabbed[data-tab-active="true"],
+.cbi-value[data-tab-active="true"] {
+    animation: tabContentFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tabContentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 

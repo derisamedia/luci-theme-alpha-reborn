@@ -912,6 +912,87 @@ return baseclass.extend({
         });
         bodyClassObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
+        // Smooth tab switch & height morphing animation inside modals & page sections
+        const animateContainerHeight = (element, oldHeight, newHeight, duration = 220) => {
+            if (!element || !oldHeight || !newHeight || Math.abs(newHeight - oldHeight) < 4) return;
+            
+            element.style.height = oldHeight + 'px';
+            element.offsetHeight; // force reflow
+            element.style.transition = `height ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), width ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+            element.style.height = newHeight + 'px';
+
+            clearTimeout(element._heightMorphTimer);
+            element._heightMorphTimer = setTimeout(() => {
+                element.style.height = '';
+                element.style.transition = '';
+            }, duration + 30);
+        };
+
+        // Tab click listener for smooth tab transition in modal & page
+        document.addEventListener('click', (e) => {
+            const tabBtn = e.target.closest('.cbi-tabmenu a, .cbi-tabmenu li, [data-tab-title], .cbi-tab, .tab-pane');
+            if (!tabBtn) return;
+
+            const modal = tabBtn.closest('.modal');
+            const targetContainer = modal || tabBtn.closest('.cbi-map, .cbi-section');
+            if (!targetContainer) return;
+
+            const oldH = targetContainer.offsetHeight;
+
+            // Allow LuCI to execute tab switch, then animate height
+            setTimeout(() => {
+                const newH = targetContainer.offsetHeight;
+                animateContainerHeight(targetContainer, oldH, newH, 220);
+            }, 15);
+        }, true);
+
+        // MutationObserver to catch attribute & node changes (like data-tab-active) inside modals
+        let isMorphing = false;
+        const attachModalMorphObserver = (modal) => {
+            if (!modal || modal._morphObserved) return;
+            modal._morphObserved = true;
+
+            let prevHeight = modal.offsetHeight;
+
+            const mutObs = new MutationObserver(() => {
+                if (isMorphing || !document.body.classList.contains('modal-overlay-active')) {
+                    prevHeight = modal.offsetHeight;
+                    return;
+                }
+                if (modal.classList.contains('closing')) return;
+
+                const newHeight = modal.offsetHeight;
+                if (prevHeight && newHeight && Math.abs(newHeight - prevHeight) > 6) {
+                    const oldH = prevHeight;
+                    isMorphing = true;
+                    animateContainerHeight(modal, oldH, newHeight, 220);
+                    setTimeout(() => {
+                        isMorphing = false;
+                        prevHeight = modal.offsetHeight;
+                    }, 250);
+                } else {
+                    prevHeight = newHeight;
+                }
+            });
+
+            mutObs.observe(modal, { 
+                childList: true, 
+                subtree: true, 
+                characterData: true, 
+                attributes: true, 
+                attributeFilter: ['data-tab-active', 'class', 'style'] 
+            });
+        };
+
+        const modalMorphObserver = new MutationObserver(() => {
+            const overlay = document.getElementById('modal_overlay');
+            if (overlay) {
+                const modals = overlay.querySelectorAll('.modal');
+                modals.forEach(attachModalMorphObserver);
+            }
+        });
+        modalMorphObserver.observe(document.body, { childList: true, subtree: true });
+
         // Click interceptor for modal close buttons & overlay background
         document.addEventListener('click', (e) => {
             const overlay = document.getElementById('modal_overlay');
